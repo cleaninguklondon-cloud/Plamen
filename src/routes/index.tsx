@@ -16,7 +16,13 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Section } from "@/components/booking/Section";
 import { Counter } from "@/components/booking/Counter";
 import {
@@ -79,6 +85,18 @@ function Index() {
     };
     console.log("[booking]", booking);
     await handlePayment(amountToPay, booking);
+  };
+
+  const updatePropertyType = (propertyType: BookingState["propertyType"]) => {
+    setS((p) => ({
+      ...p,
+      propertyType,
+      isStudio: propertyType === "flat" ? p.isStudio : false,
+    }));
+  };
+
+  const updateFlatType = (flatType: "flat" | "studio") => {
+    setS((p) => ({ ...p, propertyType: "flat", isStudio: flatType === "studio" }));
   };
 
   return (
@@ -191,7 +209,7 @@ function Index() {
           <Section step={3} title="Property type">
             <RadioGroup
               value={s.propertyType}
-              onValueChange={(v) => update("propertyType", v as "flat" | "house")}
+              onValueChange={(v) => updatePropertyType(v as BookingState["propertyType"])}
               className="grid grid-cols-2 gap-3"
             >
               {(["flat", "house"] as const).map((t) => (
@@ -215,13 +233,26 @@ function Index() {
               ))}
             </RadioGroup>
             {s.propertyType === "flat" && (
-              <label className="mt-4 flex cursor-pointer items-center gap-2.5 rounded-xl bg-secondary/60 px-4 py-3 text-sm">
-                <Checkbox
-                  checked={s.isStudio}
-                  onCheckedChange={(v) => update("isStudio", Boolean(v))}
-                />
-                Studio — no separate bedroom
-              </label>
+              <div className="mt-4 space-y-2">
+                <Label
+                  htmlFor="flat-type"
+                  className="text-xs uppercase tracking-wider text-muted-foreground"
+                >
+                  Flat type
+                </Label>
+                <Select value={s.isStudio ? "studio" : "flat"} onValueChange={updateFlatType}>
+                  <SelectTrigger
+                    id="flat-type"
+                    className="h-12 rounded-2xl bg-background text-base"
+                  >
+                    <SelectValue placeholder="Choose flat type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="flat">Flat</SelectItem>
+                    <SelectItem value="studio">Studio — no separate bedroom</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             )}
           </Section>
 
