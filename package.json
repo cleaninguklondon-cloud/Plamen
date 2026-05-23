@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "setup": "bun install && test -f .env || cp .env.example .env",
-    "push:plamen": "bash scripts/push-plamen.sh"
+    "push:plamen": "bash scripts/push-plamen.sh",
+    "deploy:vercel": "bun run build:vercel && npx vercel deploy --prebuilt --prod"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
