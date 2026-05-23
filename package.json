@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "setup": "bun install && test -f .env || cp .env.example .env"
+    "setup": "bun install && test -f .env || cp .env.example .env",
+    "push:plamen": "bash scripts/push-plamen.sh"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
